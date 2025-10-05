@@ -3759,3 +3759,15 @@ section,
     /*background: color-mix(in srgb, var(--accent-color), transparent 92%);*/
 }
 --------------------------------------------------------------*/
+
+/* Custom CSS for the email link with text */
+.header .social-links a.email {
+    width: auto; /* Allows the button to expand based on content */
+    padding: 0 12px; /* Adds some horizontal padding */
+    justify-content: flex-start; /* Aligns content to the left */
+}
+
+.header .social-links a.email span {
+    margin-left: 8px; /* Adds space between the icon and the email address */
+    font-size: 14px; /* Optional: Adjust font size for better fit */
+}
