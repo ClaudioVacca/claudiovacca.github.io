@@ -549,7 +549,7 @@ section,
 .section {
   color: var(--default-color);
   background-color: var(--background-color);
-  padding: 60px 0;
+  padding: 20px 0;
   overflow: clip;
 }
 
@@ -865,7 +865,7 @@ section,
 --------------------------------------------------------------*/
 .about {
   padding-top: 120px;
-  padding-bottom: 120px;
+  padding-bottom: 0;
 }
 
 .about .intro-header {
@@ -888,7 +888,7 @@ section,
 }
 
 .about .main-content-wrapper {
-  margin-bottom: 100px;
+  margin-bottom: 0px;
 }
 
 .about .profile-section .profile-image-container {
@@ -1110,7 +1110,7 @@ section,
   }
 
   .about .main-content-wrapper {
-    margin-bottom: 60px;
+    margin-bottom: 0px;
   }
 
   .about .content-area {
