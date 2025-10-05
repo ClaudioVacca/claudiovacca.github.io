@@ -181,7 +181,7 @@ h6 {
 }
 
 .header .social-links {
-  margin: 0 0 20px 0;
+  margin: 25px 0 20px 0;
 }
 
 .header .social-links a {
@@ -3722,3 +3722,40 @@ section,
 .starter-section {
   /* Add your styles here */
 }
+
+/*# Custom Skills Section
+  --------------------------------------------------------------*/
+.skill-category {
+    margin-bottom: 20px;
+}
+
+.skills-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Provides consistent spacing between items */
+}
+
+.skill-item {
+    font-weight: 450;
+    font-size: 14px;
+    color: var(--heading-color);
+    background: color-mix(in srgb, var(--accent-color), transparent 92%);
+    /*color: var(--contrast-color);*/
+    /*background: var(--accent-color);*/
+    border: 1px solid var(--accent-color);
+    display: inline-block;
+    border-radius: 4px;
+    transition: all 0.3s ease-in-out;
+    padding: 8px 15px;
+    margin-bottom: 5px;
+    font-family: var(--heading-font);
+}
+
+.skill-item:hover {
+    transform: translateY(-2px); /* Add a little lift effect on hover */
+    background: var(--accent-color);
+    color: var(--contrast-color);
+    /*color: var(--accent-color);*/
+    /*background: color-mix(in srgb, var(--accent-color), transparent 92%);*/
+}
+--------------------------------------------------------------*/
