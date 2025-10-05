@@ -3771,3 +3771,10 @@ section,
     margin-left: 8px; /* Adds space between the icon and the email address */
     font-size: 14px; /* Optional: Adjust font size for better fit */
 }
+
+.header .social-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* This keeps the items centered */
+    gap: 10px; /* Adjust this value to increase or decrease the space */
+}
