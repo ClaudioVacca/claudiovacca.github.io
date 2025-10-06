@@ -3778,3 +3778,14 @@ section,
     align-items: center; /* This keeps the items centered */
     gap: 10px; /* Adjust this value to increase or decrease the space */
 }
+
+.header .social-links .location i {
+    color: var(--accent-color);
+}
+
+/* Custom style to make the 'About' section image as wide as the text */
+.about .profile-section .profile-image-container img {
+    max-width: 100%;      /* Removes the 300px width limit */
+    aspect-ratio: auto;   /* Removes the 1:1 square aspect ratio */
+    height: auto;         /* Ensures the height adjusts to the new width */
+}
