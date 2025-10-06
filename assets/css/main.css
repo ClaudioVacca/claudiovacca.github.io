@@ -3891,3 +3891,38 @@ section,
     height: 100%;
     object-fit: cover;
 }
+
+.portfolio-details .portfolio-details-slider img {
+    aspect-ratio: 16/9;
+    width: 100%;
+    object-fit: contain;
+}
+
+.portfolio-details .portfolio-details-slider .swiper-pagination {
+    margin-top: 20px;
+    position: relative;
+}
+
+.portfolio-details .portfolio-details-slider .swiper-pagination .swiper-pagination-bullet {
+    width: 12px;
+    height: 12px;
+    background-color: color-mix(in srgb, var(--default-color), transparent 85%);
+    opacity: 1;
+}
+
+.portfolio-details .portfolio-details-slider .swiper-pagination .swiper-pagination-bullet-active {
+    background-color: var(--accent-color);
+}
+
+/* 1. Imposta un'altezza fissa per l'immagine dello slider principale */
+.portfolio-project-card .portfolio-details-slider .swiper-slide img {
+    height: 300px;       /* Stessa altezza delle altre immagini del portfolio */
+    object-fit: cover;   /* Fa in modo che l'immagine copra l'area senza deformarsi */
+    aspect-ratio: auto;  /* Annulla la regola 16/9 precedente */
+    width: 100%;
+}
+
+/* 2. Rimuovi il padding dalla card principale quando contiene uno slider */
+.portfolio .portfolio-card.portfolio-project-dynamic {
+    padding: 0;
+}

@@ -216,16 +216,19 @@
               </div>`;
                         }
                     } else if (item.type === 'gdrive-video') {
-                        if (item.url && item.thumbUrl) {
+                        if (item.fileId) {
+                            const embedUrl = `https://drive.google.com/file/d/${item.fileId}/preview`;
+                            const thumbUrl = `https://drive.google.com/thumbnail?id=${item.fileId}`;
+
                             mainSlidesHTML += `
         <div class="swiper-slide">
           <div class="ratio ratio-16x9">
-            <iframe src="${item.url}" title="Google Drive video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe src="${embedUrl}" title="Google Drive video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
           </div>
         </div>`;
                             thumbSlidesHTML += `
         <div class="swiper-slide thumb-video">
-          <img src="${item.thumbUrl}" alt="Google Drive video thumbnail">
+          <img src="${thumbUrl}" alt="Google Drive video thumbnail">
           <i class="bi bi-play-circle-fill"></i>
         </div>`;
                         }
