@@ -1,11 +1,3 @@
-/**
- * Template Name: iPortfolio
- * Template URL: https://bootstrapmade.com/iportfolio-bootstrap-portfolio-websites-template/
- * Updated: Jun 29 2024 with Bootstrap v5.3.3
- * Author: BootstrapMade.com
- * License: https://bootstrapmade.com/license/
- */
-
 (function() {
     "use strict";
 
@@ -128,39 +120,6 @@
     });
 
     /**
-     * Init isotope layout and filters
-     */
-    document.querySelectorAll('.isotope-layout').forEach(function(isotopeItem) {
-        let layout = isotopeItem.getAttribute('data-layout') ?? 'masonry';
-        let filter = isotopeItem.getAttribute('data-default-filter') ?? '*';
-        let sort = isotopeItem.getAttribute('data-sort') ?? 'original-order';
-
-        let initIsotope;
-        imagesLoaded(isotopeItem.querySelector('.isotope-container'), function() {
-            initIsotope = new Isotope(isotopeItem.querySelector('.isotope-container'), {
-                itemSelector: '.isotope-item',
-                layoutMode: layout,
-                filter: filter,
-                sortBy: sort
-            });
-        });
-
-        isotopeItem.querySelectorAll('.isotope-filters li').forEach(function(filters) {
-            filters.addEventListener('click', function() {
-                isotopeItem.querySelector('.isotope-filters .filter-active').classList.remove('filter-active');
-                this.classList.add('filter-active');
-                initIsotope.arrange({
-                    filter: this.getAttribute('data-filter')
-                });
-                if (typeof aosInit === 'function') {
-                    aosInit();
-                }
-            }, false);
-        });
-
-    });
-
-    /**
      * Builds and initializes all dynamic portfolio sliders.
      */
     function buildAndInitPortfolios() {
@@ -191,29 +150,29 @@
                 mediaItems.forEach(item => {
                     if (item.type === 'image') {
                         mainSlidesHTML += `
-            <div class="swiper-slide">
-              <a href="${item.url}" class="glightbox" data-gallery="${galleryId}">
-                <img src="${item.url}" alt="Project media">
-              </a>
-            </div>`;
+                          <div class="swiper-slide">
+                            <a href="${item.url}" class="glightbox" data-gallery="${galleryId}">
+                              <img src="${item.url}" alt="Project media">
+                            </a>
+                          </div>`;
                         thumbSlidesHTML += `
-            <div class="swiper-slide">
-              <img src="${item.url}" alt="Project thumbnail">
-            </div>`;
+                          <div class="swiper-slide">
+                            <img src="${item.url}" alt="Project thumbnail">
+                          </div>`;
                     } else if (item.type === 'video') {
                         const videoId = getYoutubeID(item.url);
                         if (videoId) {
                             mainSlidesHTML += `
-              <div class="swiper-slide">
-                <div class="ratio ratio-16x9">
-                  <iframe src="https://www.youtube.com/embed/${videoId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                </div>
-              </div>`;
+                            <div class="swiper-slide">
+                              <div class="ratio ratio-16x9">
+                                <iframe src="https://www.youtube.com/embed/${videoId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                              </div>
+                            </div>`;
                             thumbSlidesHTML += `
-              <div class="swiper-slide thumb-video">
-                <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Video thumbnail">
-                <i class="bi bi-play-fill"></i>
-              </div>`;
+                            <div class="swiper-slide thumb-video">
+                              <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Video thumbnail">
+                              <i class="bi bi-play-fill"></i>
+                            </div>`;
                         }
                     } else if (item.type === 'gdrive-video') {
                         if (item.fileId) {
@@ -221,34 +180,33 @@
                             const thumbUrl = `https://drive.google.com/thumbnail?id=${item.fileId}`;
 
                             mainSlidesHTML += `
-        <div class="swiper-slide">
-          <div class="ratio ratio-16x9">
-            <iframe src="${embedUrl}" title="Google Drive video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-          </div>
-        </div>`;
+                              <div class="swiper-slide">
+                                <div class="ratio ratio-16x9">
+                                  <iframe src="${embedUrl}" title="Google Drive video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                </div>
+                              </div>`;
                             thumbSlidesHTML += `
-        <div class="swiper-slide thumb-video">
-          <img src="${thumbUrl}" alt="Google Drive video thumbnail">
-          <i class="bi bi-play-circle-fill"></i>
-        </div>`;
+                              <div class="swiper-slide thumb-video">
+                                <img src="${thumbUrl}" alt="Google Drive video thumbnail">
+                                <i class="bi bi-play-circle-fill"></i>
+                              </div>`;
                         }
-
                     }
                 });
 
                 // Assemble the complete HTML for the slideshow and its thumbs
                 const fullSlideshowHTML = `
-        <div class="portfolio-details-slider swiper">
-          <div class="swiper-wrapper align-items-center">${mainSlidesHTML}</div>
-        </div>
-        <div class="thumbs-container">
-          <div class="swiper-button-prev"></div>
-          <div class="swiper thumbs-slider">
-            <div class="swiper-wrapper">${thumbSlidesHTML}</div>
-            <div class="swiper-scrollbar"></div>
-          </div>
-          <div class="swiper-button-next"></div>
-        </div>`;
+                  <div class="portfolio-details-slider swiper">
+                    <div class="swiper-wrapper align-items-center">${mainSlidesHTML}</div>
+                  </div>
+                  <div class="thumbs-container">
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper thumbs-slider">
+                      <div class="swiper-wrapper">${thumbSlidesHTML}</div>
+                      <div class="swiper-scrollbar"></div>
+                    </div>
+                    <div class="swiper-button-next"></div>
+                  </div>`;
 
                 // Inject the generated HTML into the placeholder
                 slideshowContainer.innerHTML = fullSlideshowHTML;
@@ -266,20 +224,19 @@
             }
         });
 
-        // Now that all slideshows are built, initialize them
+        // Initialize all Swiper instances
         initAllSwipers();
 
+        // Initialize GLightbox
         GLightbox({
             selector: '.glightbox'
         });
     }
 
     /**
-     * Initializes all Swiper instances on the page (portfolio and others).
-     * This function is now called AFTER the dynamic HTML has been built.
+     * Initializes all Swiper instances on the page.
      */
     function initAllSwipers() {
-        // Portfolio sliders with thumbs
         document.querySelectorAll('.slideshow-container').forEach(function(container) {
             const mainSliderEl = container.querySelector('.portfolio-details-slider');
             const thumbsSliderEl = container.querySelector('.thumbs-slider');
@@ -310,13 +267,47 @@
                 },
             });
         });
-
-        // Initialize any other simple swipers on the page here (e.g., testimonials)
-        // Example: new Swiper('.testimonials-slider', { ... });
     }
 
-// Run the main build function when the page content is loaded
-    window.addEventListener('DOMContentLoaded', buildAndInitPortfolios);
+    /**
+     * Main function to initialize the portfolio grid.
+     */
+    function initPortfolio() {
+        // Build the dynamic slideshows first
+        buildAndInitPortfolios();
+
+        // Then, use imagesLoaded to initialize Isotope
+        const isotopeContainer = document.querySelector('.isotope-layout .isotope-container');
+        if (isotopeContainer) {
+            const iso = new Isotope(isotopeContainer, {
+                itemSelector: '.isotope-item',
+                layoutMode: 'masonry' // Default layout
+            });
+
+            const imgLoad = imagesLoaded(isotopeContainer);
+
+            imgLoad.on('done', function() {
+                // Relayout Isotope after all images are loaded
+                iso.layout();
+
+                // Set up filters
+                const filterButtons = document.querySelectorAll('.isotope-layout .isotope-filters li');
+                filterButtons.forEach(el => {
+                    el.addEventListener('click', function() {
+                        filterButtons.forEach(filter => filter.classList.remove('filter-active'));
+                        this.classList.add('filter-active');
+                        iso.arrange({
+                            filter: this.getAttribute('data-filter')
+                        });
+                    }, false);
+                });
+            });
+        }
+    }
+
+    // Run the main portfolio initialization on DOMContentLoaded
+    window.addEventListener('DOMContentLoaded', initPortfolio);
+
 
     /**
      * Correct scrolling position upon page load for URLs containing hash links.
