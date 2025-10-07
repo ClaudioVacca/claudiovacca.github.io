@@ -3926,3 +3926,46 @@ section,
 .portfolio .portfolio-card.portfolio-project-dynamic {
     padding: 0;
 }
+
+/* --- Styles for Lazy-Loading Videos --- */
+.video-placeholder {
+    position: relative;
+    cursor: pointer;
+    background-color: #000;
+}
+
+.video-placeholder img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.video-placeholder:hover img {
+    opacity: 1;
+}
+
+.video-placeholder .play-button-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.video-placeholder .play-button-overlay i {
+    font-size: 60px; /* Adjust size as needed */
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease, color 0.3s ease;
+    pointer-events: none; /* Allows clicks to go through to the parent div */
+}
+
+.video-placeholder:hover .play-button-overlay i {
+    transform: scale(1.1);
+    color: #fff;
+}

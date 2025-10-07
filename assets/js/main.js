@@ -5,35 +5,23 @@
      * Header toggle
      */
     const headerToggleBtn = document.querySelector('.header-toggle');
-
-    function headerToggle() {
-        document.querySelector('#header').classList.toggle('header-show');
-        headerToggleBtn.classList.toggle('bi-list');
-        headerToggleBtn.classList.toggle('bi-x');
+    if (headerToggleBtn) {
+        function headerToggle() {
+            document.querySelector('#header').classList.toggle('header-show');
+            headerToggleBtn.classList.toggle('bi-list');
+            headerToggleBtn.classList.toggle('bi-x');
+        }
+        headerToggleBtn.addEventListener('click', headerToggle);
     }
-    headerToggleBtn.addEventListener('click', headerToggle);
 
     /**
-     * Hide mobile nav on same-page/hash links
+     * Hide mobile nav on same-page hash links
      */
     document.querySelectorAll('#navmenu a').forEach(navmenu => {
         navmenu.addEventListener('click', () => {
             if (document.querySelector('.header-show')) {
-                headerToggle();
+                headerToggleBtn.click();
             }
-        });
-
-    });
-
-    /**
-     * Toggle mobile nav dropdowns
-     */
-    document.querySelectorAll('.navmenu .toggle-dropdown').forEach(navmenu => {
-        navmenu.addEventListener('click', function(e) {
-            e.preventDefault();
-            this.parentNode.classList.toggle('active');
-            this.parentNode.nextElementSibling.classList.toggle('dropdown-active');
-            e.stopImmediatePropagation();
         });
     });
 
@@ -57,13 +45,15 @@
             window.scrollY > 100 ? scrollTop.classList.add('active') : scrollTop.classList.remove('active');
         }
     }
-    scrollTop.addEventListener('click', (e) => {
-        e.preventDefault();
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
+    if (scrollTop) {
+        scrollTop.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         });
-    });
+    }
 
     window.addEventListener('load', toggleScrollTop);
     document.addEventListener('scroll', toggleScrollTop);
@@ -82,51 +72,11 @@
     window.addEventListener('load', aosInit);
 
     /**
-     * Init typed.js
-     */
-    const selectTyped = document.querySelector('.typed');
-    if (selectTyped) {
-        let typed_strings = selectTyped.getAttribute('data-typed-items');
-        typed_strings = typed_strings.split(',');
-        new Typed('.typed', {
-            strings: typed_strings,
-            loop: true,
-            typeSpeed: 100,
-            backSpeed: 50,
-            backDelay: 2000
-        });
-    }
-
-    /**
-     * Initiate Pure Counter
-     */
-    new PureCounter();
-
-    /**
-     * Animate the skills items on reveal
-     */
-    let skillsAnimation = document.querySelectorAll('.skills-animation');
-    skillsAnimation.forEach((item) => {
-        new Waypoint({
-            element: item,
-            offset: '80%',
-            handler: function(direction) {
-                let progress = item.querySelectorAll('.progress .progress-bar');
-                progress.forEach(el => {
-                    el.style.width = el.getAttribute('aria-valuenow') + '%';
-                });
-            }
-        });
-    });
-
-    /**
      * Builds and initializes all dynamic portfolio sliders.
      */
     function buildAndInitPortfolios() {
-
-        // Helper function to extract YouTube video ID from various URL formats
         function getYoutubeID(url) {
-            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
             const match = url.match(regExp);
             return (match && match[2].length === 11) ? match[2] : null;
         }
@@ -134,90 +84,67 @@
         document.querySelectorAll('.portfolio-project-dynamic').forEach((projectElement, projectIndex) => {
             const mediaDataScript = projectElement.querySelector('.project-media-data');
             const slideshowContainer = projectElement.querySelector('.slideshow-container');
-
-            if (!mediaDataScript || !slideshowContainer) {
-                console.error('Skipping a dynamic project block because it is missing data or a slideshow container.', projectElement);
-                return;
-            }
+            if (!mediaDataScript || !slideshowContainer) return;
 
             try {
                 const mediaItems = JSON.parse(mediaDataScript.innerHTML.trim());
                 const galleryId = `project-gallery-${projectIndex + 1}`;
-
                 let mainSlidesHTML = '';
                 let thumbSlidesHTML = '';
 
                 mediaItems.forEach(item => {
                     if (item.type === 'image') {
                         mainSlidesHTML += `
-                          <div class="swiper-slide">
-                            <a href="${item.url}" class="glightbox" data-gallery="${galleryId}">
-                              <img src="${item.url}" alt="Project media">
-                            </a>
-                          </div>`;
+              <div class="swiper-slide">
+                <a href="${item.url}" class="glightbox" data-gallery="${galleryId}">
+                  <img src="${item.url}" alt="Project media" loading="lazy">
+                </a>
+              </div>`;
                         thumbSlidesHTML += `
-                          <div class="swiper-slide">
-                            <img src="${item.url}" alt="Project thumbnail">
-                          </div>`;
+              <div class="swiper-slide">
+                <img src="${item.url}" alt="Project thumbnail" loading="lazy">
+              </div>`;
                     } else if (item.type === 'video') {
                         const videoId = getYoutubeID(item.url);
                         if (videoId) {
+                            // OPTIMIZED: Create a placeholder div instead of an iframe
                             mainSlidesHTML += `
-                            <div class="swiper-slide">
-                              <div class="ratio ratio-16x9">
-                                <iframe src="https://www.youtube.com/embed/${videoId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                              </div>
-                            </div>`;
+                <div class="swiper-slide">
+                  <div class="video-placeholder ratio ratio-16x9" data-video-id="${videoId}">
+                    <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Video Thumbnail" loading="lazy">
+                    <div class="play-button-overlay"><i class="bi bi-play-circle-fill"></i></div>
+                  </div>
+                </div>`;
                             thumbSlidesHTML += `
-                            <div class="swiper-slide thumb-video">
-                              <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Video thumbnail">
-                              <i class="bi bi-play-fill"></i>
-                            </div>`;
-                        }
-                    } else if (item.type === 'gdrive-video') {
-                        if (item.fileId) {
-                            const embedUrl = `https://drive.google.com/file/d/${item.fileId}/preview`;
-                            const thumbUrl = `https://drive.google.com/thumbnail?id=${item.fileId}`;
-
-                            mainSlidesHTML += `
-                              <div class="swiper-slide">
-                                <div class="ratio ratio-16x9">
-                                  <iframe src="${embedUrl}" title="Google Drive video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                                </div>
-                              </div>`;
-                            thumbSlidesHTML += `
-                              <div class="swiper-slide thumb-video">
-                                <img src="${thumbUrl}" alt="Google Drive video thumbnail">
-                                <i class="bi bi-play-circle-fill"></i>
-                              </div>`;
+                <div class="swiper-slide thumb-video">
+                  <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Video thumbnail" loading="lazy">
+                  <i class="bi bi-play-fill"></i>
+                </div>`;
                         }
                     }
                 });
 
                 const fullSlideshowHTML = `
-                  <div class="portfolio-details-slider swiper">
-                    <div class="swiper-wrapper align-items-center">${mainSlidesHTML}</div>
-                  </div>
-                  <div class="thumbs-container">
-                    <div class="swiper-button-prev"></div>
-                    <div class="swiper thumbs-slider">
-                      <div class="swiper-wrapper">${thumbSlidesHTML}</div>
-                      <div class="swiper-scrollbar"></div>
-                    </div>
-                    <div class="swiper-button-next"></div>
-                  </div>`;
+          <div class="portfolio-details-slider swiper">
+            <div class="swiper-wrapper align-items-center">${mainSlidesHTML}</div>
+          </div>
+          <div class="thumbs-container">
+            <div class="swiper-button-prev"></div>
+            <div class="swiper thumbs-slider">
+              <div class="swiper-wrapper">${thumbSlidesHTML}</div>
+              <div class="swiper-scrollbar"></div>
+            </div>
+            <div class="swiper-button-next"></div>
+          </div>`;
 
                 slideshowContainer.innerHTML = fullSlideshowHTML;
-
                 if (mediaItems.length <= 1) {
                     const thumbsContainer = slideshowContainer.querySelector('.thumbs-container');
-                    if (thumbsContainer) {
-                        thumbsContainer.style.display = 'none';
-                    }
+                    if (thumbsContainer) thumbsContainer.style.display = 'none';
                 }
 
             } catch (e) {
-                console.error('Failed to parse JSON or build slideshow for project:', projectElement, e);
+                console.error('Failed to parse JSON or build slideshow for project', projectElement, e);
             }
         });
 
@@ -249,7 +176,6 @@
 
             new Swiper(mainSliderEl, {
                 loop: false,
-                effect: 'coverflow',
                 speed: 600,
                 autoplay: false,
                 navigation: {
@@ -264,34 +190,50 @@
     }
 
     /**
-     * NEW: Main function to initialize the portfolio grid correctly.
+     * NEW: Handles clicks on video placeholders to lazy-load the YouTube iframe.
+     */
+    function initializeVideoLazyLoading() {
+        document.body.addEventListener('click', function(event) {
+            const placeholder = event.target.closest('.video-placeholder');
+            if (!placeholder) return;
+
+            const videoId = placeholder.dataset.videoId;
+            if (!videoId) return;
+
+            // Create the iframe HTML string
+            const iframeHtml = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+
+            // Replace the placeholder's content with the iframe
+            placeholder.innerHTML = iframeHtml;
+        });
+    }
+
+
+    /**
+     * Main function to initialize the portfolio grid correctly.
      */
     function initializePortfolioGrid() {
-        // Step 1: Build all dynamic slideshows first
         buildAndInitPortfolios();
+        initializeVideoLazyLoading(); // Activate the video click handler
 
-        // Step 2: Set up Isotope, but wait for images to load before laying it out
         const isotopeLayout = document.querySelector('.isotope-layout');
         if (!isotopeLayout) return;
 
         const isotopeContainer = isotopeLayout.querySelector('.isotope-container');
         const filters = isotopeLayout.querySelectorAll('.isotope-filters li');
 
-        // Wait for all images (including those from dynamic sliders) to be fully loaded
         imagesLoaded(isotopeContainer, function() {
-            let layout = isotopeLayout.getAttribute('data-layout') ?? 'masonry';
-            let filter = isotopeLayout.getAttribute('data-default-filter') ?? '*';
-            let sort = isotopeLayout.getAttribute('data-sort') ?? 'original-order';
+            let layout = isotopeLayout.getAttribute('data-layout') || 'masonry';
+            let filter = isotopeLayout.getAttribute('data-default-filter') || '*';
+            let sort = isotopeLayout.getAttribute('data-sort') || 'original-order';
 
-            // Step 3: Initialize Isotope now that all elements have their final dimensions
             const initIsotope = new Isotope(isotopeContainer, {
                 itemSelector: '.isotope-item',
                 layoutMode: layout,
-                filter: filter, // Apply the default filter read from the HTML
+                filter: filter,
                 sortBy: sort
             });
 
-            // Set up the filter click events
             filters.forEach(function(el) {
                 el.addEventListener('click', function() {
                     isotopeLayout.querySelector('.isotope-filters .filter-active').classList.remove('filter-active');
@@ -304,32 +246,12 @@
         });
     }
 
-    // Run the main portfolio function when the window is fully loaded
     window.addEventListener('load', initializePortfolioGrid);
-
-    /**
-     * Correct scrolling position upon page load for URLs containing hash links.
-     */
-    window.addEventListener('load', function(e) {
-        if (window.location.hash) {
-            if (document.querySelector(window.location.hash)) {
-                setTimeout(() => {
-                    let section = document.querySelector(window.location.hash);
-                    let scrollMarginTop = getComputedStyle(section).scrollMarginTop;
-                    window.scrollTo({
-                        top: section.offsetTop - parseInt(scrollMarginTop),
-                        behavior: 'smooth'
-                    });
-                }, 100);
-            }
-        }
-    });
 
     /**
      * Navmenu Scrollspy
      */
     let navmenulinks = document.querySelectorAll('.navmenu a');
-
     function navmenuScrollspy() {
         navmenulinks.forEach(navmenulink => {
             if (!navmenulink.hash) return;
