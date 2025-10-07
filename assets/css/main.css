@@ -3915,7 +3915,7 @@ section,
 }
 
 /* 1. Imposta un'altezza fissa per l'immagine dello slider principale */
-.portfolio-project-card .portfolio-details-slider .swiper-slide img {
+.portfolio-project-card .portfolio-details-slider .swiper-slide .glightbox img {
     height: 300px;       /* Stessa altezza delle altre immagini del portfolio */
     object-fit: cover;   /* Fa in modo che l'immagine copra l'area senza deformarsi */
     aspect-ratio: auto;  /* Annulla la regola 16/9 precedente */
