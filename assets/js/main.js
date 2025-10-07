@@ -194,7 +194,6 @@
                     }
                 });
 
-                // Assemble the complete HTML for the slideshow and its thumbs
                 const fullSlideshowHTML = `
                   <div class="portfolio-details-slider swiper">
                     <div class="swiper-wrapper align-items-center">${mainSlidesHTML}</div>
@@ -208,10 +207,8 @@
                     <div class="swiper-button-next"></div>
                   </div>`;
 
-                // Inject the generated HTML into the placeholder
                 slideshowContainer.innerHTML = fullSlideshowHTML;
 
-                // HIDE THUMBNAILS IF THERE IS ONLY ONE ITEM
                 if (mediaItems.length <= 1) {
                     const thumbsContainer = slideshowContainer.querySelector('.thumbs-container');
                     if (thumbsContainer) {
@@ -224,17 +221,14 @@
             }
         });
 
-        // Initialize all Swiper instances
         initAllSwipers();
-
-        // Initialize GLightbox
         GLightbox({
             selector: '.glightbox'
         });
     }
 
     /**
-     * Initializes all Swiper instances on the page.
+     * Initializes all Swiper instances.
      */
     function initAllSwipers() {
         document.querySelectorAll('.slideshow-container').forEach(function(container) {
@@ -270,44 +264,48 @@
     }
 
     /**
-     * Main function to initialize the portfolio grid.
+     * NEW: Main function to initialize the portfolio grid correctly.
      */
-    function initPortfolio() {
-        // Build the dynamic slideshows first
+    function initializePortfolioGrid() {
+        // Step 1: Build all dynamic slideshows first
         buildAndInitPortfolios();
 
-        // Then, use imagesLoaded to initialize Isotope
-        const isotopeContainer = document.querySelector('.isotope-layout .isotope-container');
-        if (isotopeContainer) {
-            const iso = new Isotope(isotopeContainer, {
+        // Step 2: Set up Isotope, but wait for images to load before laying it out
+        const isotopeLayout = document.querySelector('.isotope-layout');
+        if (!isotopeLayout) return;
+
+        const isotopeContainer = isotopeLayout.querySelector('.isotope-container');
+        const filters = isotopeLayout.querySelectorAll('.isotope-filters li');
+
+        // Wait for all images (including those from dynamic sliders) to be fully loaded
+        imagesLoaded(isotopeContainer, function() {
+            let layout = isotopeLayout.getAttribute('data-layout') ?? 'masonry';
+            let filter = isotopeLayout.getAttribute('data-default-filter') ?? '*';
+            let sort = isotopeLayout.getAttribute('data-sort') ?? 'original-order';
+
+            // Step 3: Initialize Isotope now that all elements have their final dimensions
+            const initIsotope = new Isotope(isotopeContainer, {
                 itemSelector: '.isotope-item',
-                layoutMode: 'masonry' // Default layout
+                layoutMode: layout,
+                filter: filter, // Apply the default filter read from the HTML
+                sortBy: sort
             });
 
-            const imgLoad = imagesLoaded(isotopeContainer);
-
-            imgLoad.on('done', function() {
-                // Relayout Isotope after all images are loaded
-                iso.layout();
-
-                // Set up filters
-                const filterButtons = document.querySelectorAll('.isotope-layout .isotope-filters li');
-                filterButtons.forEach(el => {
-                    el.addEventListener('click', function() {
-                        filterButtons.forEach(filter => filter.classList.remove('filter-active'));
-                        this.classList.add('filter-active');
-                        iso.arrange({
-                            filter: this.getAttribute('data-filter')
-                        });
-                    }, false);
-                });
+            // Set up the filter click events
+            filters.forEach(function(el) {
+                el.addEventListener('click', function() {
+                    isotopeLayout.querySelector('.isotope-filters .filter-active').classList.remove('filter-active');
+                    this.classList.add('filter-active');
+                    initIsotope.arrange({
+                        filter: this.getAttribute('data-filter')
+                    });
+                }, false);
             });
-        }
+        });
     }
 
-    // Run the main portfolio initialization on DOMContentLoaded
-    window.addEventListener('DOMContentLoaded', initPortfolio);
-
+    // Run the main portfolio function when the window is fully loaded
+    window.addEventListener('load', initializePortfolioGrid);
 
     /**
      * Correct scrolling position upon page load for URLs containing hash links.
